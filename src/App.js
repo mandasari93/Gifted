@@ -12,20 +12,12 @@ class App extends Component {
     };
   }
 
-  searchImage() {
-    let some_data = this.state.data;
+  componentWillMount() {
     client_key
       .search("gifs", { q: "cats" })
       .then(response => {
-        response.data.forEach(gifObject => {
-          this.setState({
-            data: some_data.push(gifObject)
-          });
-          /* return (
-            <div className="col-2">
-              <img src="" alt="" />
-            </div>
-          ); */
+        this.setState({
+          data: response.data
         });
       })
       .catch(err => {
@@ -34,12 +26,27 @@ class App extends Component {
   }
 
   render() {
-    this.searchImage();
     console.log(this.state.data);
     return (
-      <div>
+      <div className="container">
         <h2>Hello World</h2>
-        <div className="imageContainer row" />
+        <div className="imageContainer row">
+          {this.state.data.map((item, index) => {
+            return (
+              <div className="imgCard col-3" key={index}>
+                <div
+                  className="content_image"
+                  style={{
+                    backgroundImage: `url(${item.images.original.url})`,
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat"
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }
