@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Moment from "react-moment";
+import "moment-timezone";
 import "./App.css";
 
 var GphApiClient = require("giphy-js-sdk-core");
@@ -14,7 +16,7 @@ class App extends Component {
 
   componentWillMount() {
     client_key
-      .search("gifs", { q: "cats" })
+      .search("gifs", { q: "jokowi" })
       .then(response => {
         this.setState({
           data: response.data
@@ -29,7 +31,9 @@ class App extends Component {
     console.log(this.state.data);
     return (
       <div className="container">
-        <h2>Hello World</h2>
+        <div className="searchInputContainer row">
+          <input className="content_input" type="text" placeholder="Search.." />
+        </div>
         <div className="imageContainer row">
           {this.state.data.map((item, index) => {
             return (
@@ -43,6 +47,12 @@ class App extends Component {
                     backgroundRepeat: "no-repeat"
                   }}
                 />
+                <div>
+                  <h3 className="content_title">
+                    {!item.title ? "No Title" : item.title}
+                  </h3>
+                  <Moment>{item.import_datetime}</Moment>
+                </div>
               </div>
             );
           })}
