@@ -38,7 +38,7 @@ class App extends Component {
     }
   }
 
-  getTrendingGif() {
+  getTrendingGif(event) {
     this.setState({
       option: "Trending"
     });
@@ -72,7 +72,7 @@ class App extends Component {
                 type="text"
                 placeholder="Search.."
               />
-              <label for="input" className="content_input-label">
+              <label htmlFor="input" className="content_input-label">
                 Press ENTER to see result
               </label>
             </div>
@@ -119,7 +119,7 @@ class App extends Component {
                   <div className="image_card col-3" key={index}>
                     <img
                       src={item.images.original.url}
-                      alt="image"
+                      alt={item.title}
                       className="img"
                     />
                     <div>
