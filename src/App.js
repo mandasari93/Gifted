@@ -61,67 +61,78 @@ class App extends Component {
     console.log(this.state.option);
     return (
       <div className="container">
-        <div className="searchInputContainer row">
-          <input
-            value={this.state.input}
-            onChange={this.handleInput}
-            onKeyDown={this.getGif}
-            className="content_input"
-            type="text"
-            placeholder="Search.."
-          />
-        </div>
-
-        <div>
-          <ul>
-            <li>
-              <label>
-                <input
-                  type="radio"
-                  value="small"
-                  checked={this.state.option === "Trending"}
-                  onChange={this.getTrendingGif}
-                />
-                Trending
+        <div className="headerContainer">
+          <div className="searchInputContainer row">
+            <div className="input_container">
+              <input
+                value={this.state.input}
+                onChange={this.handleInput}
+                onKeyDown={this.getGif}
+                className="content_input"
+                type="text"
+                placeholder="Search.."
+              />
+              <label for="input" className="content_input-label">
+                Press ENTER to see result
               </label>
-            </li>
+            </div>
+          </div>
 
-            <li>
-              <label>
-                <input
-                  type="radio"
-                  value="medium"
-                  checked={this.state.option === "Random"}
-                  onChange={this.getRandomGif}
-                />
-                Random
-              </label>
-            </li>
-          </ul>
+          <div className="option_container row">
+            <ul className="option_list_container">
+              <li>
+                <label className="radio">
+                  <input
+                    className="hidden"
+                    type="radio"
+                    value="small"
+                    checked={this.state.option === "Trending"}
+                    onChange={this.getTrendingGif}
+                  />
+                  <span className="label" />
+                  Trending
+                </label>
+              </li>
+
+              <li>
+                <label className="radio">
+                  <input
+                    className="hidden"
+                    type="radio"
+                    value="medium"
+                    checked={this.state.option === "Random"}
+                    onChange={this.getRandomGif}
+                  />
+                  <span className="label" />
+                  Random
+                </label>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="imageContainer row">
-          {this.state.data.map((item, index) => {
-            return (
-              <div className="imgCard col-3" key={index}>
-                <div
-                  className="content_image"
-                  style={{
-                    backgroundImage: `url(${item.images.original.url})`,
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat"
-                  }}
-                />
-                <div>
-                  <h3 className="content_title">
-                    {!item.title ? "No Title" : item.title}
-                  </h3>
-                  <Moment>{item.import_datetime}</Moment>
-                </div>
-              </div>
-            );
-          })}
+          <div className="col-12">
+            <div className="row">
+              {this.state.data.map((item, index) => {
+                return (
+                  <div className="image_card col-3" key={index}>
+                    <img
+                      src={item.images.original.url}
+                      alt="image"
+                      className="img"
+                    />
+                    <div>
+                      <h3 className="content_title">
+                        {!item.title ? "No Title" : item.title}
+                      </h3>
+                      <Moment format="LLLL">{item.import_datetime}</Moment>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     );
