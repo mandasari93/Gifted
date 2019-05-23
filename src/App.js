@@ -11,10 +11,13 @@ class App extends Component {
     super(props);
     this.state = {
       data: [],
-      input: ""
+      input: "",
+      option: "Trending"
     };
     this.handleInput = this.handleInput.bind(this);
     this.getGif = this.getGif.bind(this);
+    this.getTrendingGif = this.getTrendingGif.bind(this);
+    this.getRandomGif = this.getRandomGif.bind(this);
   }
 
   getGif(event) {
@@ -35,6 +38,18 @@ class App extends Component {
     }
   }
 
+  getTrendingGif() {
+    this.setState({
+      option: "Trending"
+    });
+  }
+
+  getRandomGif() {
+    this.setState({
+      option: "Random"
+    });
+  }
+
   handleInput(event) {
     this.setState({
       input: event.target.value
@@ -43,6 +58,7 @@ class App extends Component {
 
   render() {
     console.log(this.state.input);
+    console.log(this.state.option);
     return (
       <div className="container">
         <div className="searchInputContainer row">
@@ -55,6 +71,35 @@ class App extends Component {
             placeholder="Search.."
           />
         </div>
+
+        <div>
+          <ul>
+            <li>
+              <label>
+                <input
+                  type="radio"
+                  value="small"
+                  checked={this.state.option === "Trending"}
+                  onChange={this.getTrendingGif}
+                />
+                Trending
+              </label>
+            </li>
+
+            <li>
+              <label>
+                <input
+                  type="radio"
+                  value="medium"
+                  checked={this.state.option === "Random"}
+                  onChange={this.getRandomGif}
+                />
+                Random
+              </label>
+            </li>
+          </ul>
+        </div>
+
         <div className="imageContainer row">
           {this.state.data.map((item, index) => {
             return (
