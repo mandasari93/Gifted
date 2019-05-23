@@ -10,8 +10,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      inputValue: "",
+      input: "",
+      name: ""
     };
+    this.handleInput = this.handleInput.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -27,12 +32,32 @@ class App extends Component {
       });
   }
 
+  handleInput(event) {
+    this.setState({
+      input: event.target.value
+    });
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.setState({ inputValue: this.state.input });
+  };
+
   render() {
-    console.log(this.state.data);
+    console.log(this.state.input);
     return (
       <div className="container">
         <div className="searchInputContainer row">
-          <input className="content_input" type="text" placeholder="Search.." />
+          <input
+            name="name"
+            id="name"
+            value={this.input}
+            onChange={this.handleInput}
+            onSubmit={this.handleSubmit}
+            className="content_input"
+            type="text"
+            placeholder="Search.."
+          />
         </div>
         <div className="imageContainer row">
           {this.state.data.map((item, index) => {
