@@ -11,25 +11,28 @@ class App extends Component {
     super(props);
     this.state = {
       data: [],
-      inputValue: "",
-      input: "",
-      name: ""
+      input: ""
     };
     this.handleInput = this.handleInput.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.getGif = this.getGif.bind(this);
   }
 
-  componentWillMount() {
-    client_key
-      .search("gifs", { q: "jokowi" })
-      .then(response => {
-        this.setState({
-          data: response.data
+  getGif(event) {
+    if (event.key === "Enter") {
+      client_key
+        .search("gifs", { q: event.target.value })
+        .then(response => {
+          this.setState({
+            data: response.data
+          });
+        })
+        .catch(err => {
+          console.log(err);
         });
-      })
-      .catch(err => {
-        console.log(err);
+      this.setState({
+        input: ""
       });
+    }
   }
 
   handleInput(event) {
@@ -38,22 +41,15 @@ class App extends Component {
     });
   }
 
-  handleSubmit = event => {
-    event.preventDefault();
-    this.setState({ inputValue: this.state.input });
-  };
-
   render() {
     console.log(this.state.input);
     return (
       <div className="container">
         <div className="searchInputContainer row">
           <input
-            name="name"
-            id="name"
-            value={this.input}
+            value={this.state.input}
             onChange={this.handleInput}
-            onSubmit={this.handleSubmit}
+            onKeyDown={this.getGif}
             className="content_input"
             type="text"
             placeholder="Search.."
