@@ -13,7 +13,7 @@ class App extends Component {
     this.state = {
       input: "",
       select: "",
-      defaultData: []
+      data: []
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -34,6 +34,24 @@ class App extends Component {
 
   handleSubmit(event) {
     console.log(this.state.input + " and " + this.state.select.value);
+    if (this.state.select.value === "random") {
+      console.log("You choose a random data.");
+    } else if (this.state.select.value === "trending") {
+      console.log("You choose a trending data.");
+    } else {
+      console.log("You dont choose anything.");
+      client_key
+        .search("gifs", { q: this.state.input })
+        .then(response => {
+          this.setState({
+            data: response.data
+          });
+          console.log(this.state.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
     event.preventDefault();
   }
 
