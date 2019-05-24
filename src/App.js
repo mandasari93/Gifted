@@ -10,6 +10,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      trendingData: [],
+      randomData: [],
       data: [],
       input: "",
       option: "Trending"
@@ -20,13 +22,70 @@ class App extends Component {
     this.getRandomGif = this.getRandomGif.bind(this);
   }
 
+  componentWillMount() {
+    client_key
+      .trending("gifs", { limit: 6 })
+      .then(response => {
+        this.setState({
+          trendingData: response.data
+        });
+      })
+      .then(() => {
+        client_key
+          .random("gifs", {})
+          .then(res => {
+            this.setState({
+              randomData: res.data
+            });
+          })
+          .then(() => {
+            console.log(this.state);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  setSearch = gifData => {
+    return (
+      <div className="imageContainer row">
+        <div className="col-12">
+          <div className="row">
+            {gifData.map((item, index) => {
+              return (
+                <div className="image_card col-3" key={index}>
+                  <img
+                    src={item.images.original.url}
+                    alt={item.title}
+                    className="img"
+                  />
+                  <div>
+                    <h3 className="content_title">
+                      {!item.title ? "No Title" : item.title}
+                    </h3>
+                    <Moment format="LLLL">{item.import_datetime}</Moment>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   getGif(event) {
     if (event.key === "Enter") {
       client_key
         .search("gifs", { q: event.target.value })
         .then(response => {
           this.setState({
-            data: response.data
+            data: response.data,
+            option: "search"
           });
         })
         .catch(err => {
@@ -111,28 +170,15 @@ class App extends Component {
           </div>
         </div>
 
-        <div className="imageContainer row">
-          <div className="col-12">
-            <div className="row">
-              {this.state.data.map((item, index) => {
-                return (
-                  <div className="image_card col-3" key={index}>
-                    <img
-                      src={item.images.original.url}
-                      alt={item.title}
-                      className="img"
-                    />
-                    <div>
-                      <h3 className="content_title">
-                        {!item.title ? "No Title" : item.title}
-                      </h3>
-                      <Moment format="LLLL">{item.import_datetime}</Moment>
-                    </div>
-                  </div>
-                );
-              })}
+        <div>
+          {this.state.option === "search" ? (
+            <div>{this.setSearch(this.state.data)}</div>
+          ) : (
+            <div>
+              <div>{this.setSearch(this.state.trendingData)}</div>
+              {/* <div>{this.setSearch(this.state.randomData)}</div> */}
             </div>
-          </div>
+          )}
         </div>
       </div>
     );
