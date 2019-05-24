@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Moment from "react-moment";
-import "moment-timezone";
+import Select from "react-select";
+import { FaHeart } from "react-icons/fa";
 import "./App.css";
 
 var GphApiClient = require("giphy-js-sdk-core");
@@ -10,103 +11,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      trendingData: [],
-      randomData: [],
-      data: [],
       input: "",
-      option: "Trending"
+      select: "",
+      data: []
     };
     this.handleInput = this.handleInput.bind(this);
-    this.getGif = this.getGif.bind(this);
-    this.getTrendingGif = this.getTrendingGif.bind(this);
-    this.getRandomGif = this.getRandomGif.bind(this);
-  }
-
-  componentWillMount() {
-    client_key
-      .trending("gifs", { limit: 6 })
-      .then(response => {
-        this.setState({
-          trendingData: response.data
-        });
-      })
-      .then(() => {
-        client_key
-          .random("gifs", {})
-          .then(res => {
-            this.setState({
-              randomData: res.data
-            });
-          })
-          .then(() => {
-            console.log(this.state);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
-  setSearch = gifData => {
-    return (
-      <div className="imageContainer row">
-        <div className="col-12">
-          <div className="row">
-            {gifData.map((item, index) => {
-              return (
-                <div className="image_card col-3" key={index}>
-                  <img
-                    src={item.images.original.url}
-                    alt={item.title}
-                    className="img"
-                  />
-                  <div>
-                    <h3 className="content_title">
-                      {!item.title ? "No Title" : item.title}
-                    </h3>
-                    <Moment format="LLLL">{item.import_datetime}</Moment>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  getGif(event) {
-    if (event.key === "Enter") {
-      client_key
-        .search("gifs", { q: event.target.value })
-        .then(response => {
-          this.setState({
-            data: response.data,
-            option: "search"
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      this.setState({
-        input: ""
-      });
-    }
-  }
-
-  getTrendingGif(event) {
-    this.setState({
-      option: "Trending"
-    });
-  }
-
-  getRandomGif() {
-    this.setState({
-      option: "Random"
-    });
+    this.handleSelect = this.handleSelect.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleInput(event) {
@@ -115,70 +26,105 @@ class App extends Component {
     });
   }
 
+  handleSelect(event) {
+    this.setState({
+      select: event
+    });
+  }
+
+  handleSubmit(event) {
+    console.log(this.state.input + " and " + this.state.select.value);
+    if (this.state.select.value === "random") {
+      console.log("You choose a random data.");
+    } else if (this.state.select.value === "trending") {
+      console.log("You choose a trending data.");
+    } else {
+      console.log("You dont choose anything.");
+      client_key
+        .search("gifs", { q: this.state.input })
+        .then(response => {
+          this.setState({
+            data: response.data
+          });
+          console.log(this.state.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+    event.preventDefault();
+  }
+
   render() {
-    console.log(this.state.input);
-    console.log(this.state.option);
-    return (
-      <div className="container">
-        <div className="headerContainer">
-          <div className="searchInputContainer row">
-            <div className="input_container">
-              <input
-                value={this.state.input}
-                onChange={this.handleInput}
-                onKeyDown={this.getGif}
-                className="content_input"
-                type="text"
-                placeholder="Search.."
-              />
-              <label htmlFor="input" className="content_input-label">
-                Press ENTER to see result
-              </label>
+    let content;
+
+    if (this.state.data.length === 0) {
+      content = (
+        <div className="empty-content col-12">
+          <h2>No Data</h2>
+        </div>
+      );
+    } else {
+      content = this.state.data.map((item, index) => {
+        return (
+          <div className="col-3">
+            <div className="image-card-container">
+              <img src={item.images.original.url} alt={item.title} />
+              <h4>{!item.title ? "No Title" : item.title}</h4>
+              <p>
+                <Moment format="LLLL">{item.import_datetime}</Moment>
+              </p>
             </div>
           </div>
+        );
+      });
+    }
 
-          <div className="option_container row">
-            <ul className="option_list_container">
-              <li>
-                <label className="radio">
-                  <input
-                    className="hidden"
-                    type="radio"
-                    value="small"
-                    checked={this.state.option === "Trending"}
-                    onChange={this.getTrendingGif}
-                  />
-                  <span className="label" />
-                  Trending
-                </label>
-              </li>
-
-              <li>
-                <label className="radio">
-                  <input
-                    className="hidden"
-                    type="radio"
-                    value="medium"
-                    checked={this.state.option === "Random"}
-                    onChange={this.getRandomGif}
-                  />
-                  <span className="label" />
-                  Random
-                </label>
-              </li>
-            </ul>
+    return (
+      <div>
+        <div className="header">
+          <div className="row">
+            <div className="header-wrapper col-12">
+              <form onSubmit={this.handleSubmit}>
+                <input
+                  value={this.state.input}
+                  onChange={this.handleInput}
+                  type="text"
+                  placeholder="Search GIPHY"
+                  name="name"
+                  className="input-component"
+                />
+                <Select
+                  className="select-component"
+                  options={[
+                    { value: "random", label: "Random" },
+                    { value: "trending", label: "Trending" }
+                  ]}
+                  value={this.state.select}
+                  onChange={this.handleSelect}
+                  placeholder="Choose GIF category..."
+                />
+                <input
+                  className="submit-component"
+                  type="submit"
+                  value="Search now!"
+                />
+              </form>
+            </div>
           </div>
         </div>
-
-        <div>
-          {this.state.option === "search" ? (
-            <div>{this.setSearch(this.state.data)}</div>
-          ) : (
-            <div>
-              <div>{this.setSearch(this.state.trendingData)}</div>
-              {/* <div>{this.setSearch(this.state.randomData)}</div> */}
+        <div className="content container">
+          <div className="row">{content}</div>
+        </div>
+        <div className="footer container">
+          <div className="row">
+            <div className="content-footer col-12">
+              <h5>
+                Developed with <FaHeart size={12} color="#ED4C67" /> by Desi
+                Mandasari
+              </h5>
             </div>
-          )}
+          </div>
         </div>
       </div>
     );
