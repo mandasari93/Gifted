@@ -2,8 +2,129 @@
 } */
 
 .container {
-  padding-top: 140px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #f5f6fa;
 }
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+.header {
+  height: 50px;
+  padding: 20px 0;
+  background-color: #12cbc4;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.header .header-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.header .header-wrapper form {
+  width: 800px;
+  display: flex;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+.header .header-wrapper form .input-component {
+  width: 50%;
+  height: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
+  border-color: #0652dd;
+  font-weight: 700;
+  color: #0652dd;
+}
+
+.header .header-wrapper form .select-component {
+  width: 30%;
+  height: 36px;
+  margin: 0 auto;
+  border-color: #0652dd;
+  border-width: 2px;
+  color: #0652dd;
+  font-weight: 700;
+}
+
+.header .header-wrapper form .submit-component {
+  width: 15%;
+  height: 36px;
+  background-color: #0652dd;
+  color: #fff;
+  border-style: none;
+  border-radius: 5px;
+  font-weight: 700;
+}
+
+.content {
+  padding: 100px 0 20px;
+  min-height: 800px;
+}
+
+.content .image-card-container {
+  background-color: #fff;
+  min-height: 250px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.content .image-card-container img {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  margin: 0 auto;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.content .image-card-container h4,
+p {
+  margin: 0 0 5px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #0652dd;
+}
+
+.footer .content-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.footer h3 {
+  color: #fff;
+}
+
+/* OLD */
 
 .headerContainer {
   position: fixed;
