@@ -55,10 +55,6 @@ class App extends Component {
     event.preventDefault();
   }
 
-  _renderGif(data) {
-    return <h1>Test</h1>;
-  }
-
   render() {
     return (
       <div>
@@ -94,6 +90,21 @@ class App extends Component {
           </div>
         </div>
         <div className="content container">
+          <div className="row">
+            {this.state.data.map((item, index) => {
+              return (
+                <div className="col-3">
+                  <div className="image-card-container">
+                    <img src={item.images.original.url} alt={item.title} />
+                    <h4>{!item.title ? "No Title" : item.title}</h4>
+                    <p>
+                      <Moment format="LLLL">{item.import_datetime}</Moment>
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           <div className="row">
             <div className="col-3">
               <div className="image-card-container">
