@@ -33,11 +33,37 @@ class App extends Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state.input + " and " + this.state.select.value);
+    console.log(
+      this.state.input === null
+        ? "null"
+        : this.state.input + " and " + this.state.select.value
+    );
     if (this.state.select.value === "random") {
       console.log("You choose a random data.");
+      client_key
+        .trending("gifs", { q: this.state.input })
+        .then(response => {
+          this.setState({
+            data: response.data
+          });
+          console.log(this.state.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } else if (this.state.select.value === "trending") {
       console.log("You choose a trending data.");
+      client_key
+        .trending("gifs", { q: this.state.input })
+        .then(response => {
+          this.setState({
+            data: response.data
+          });
+          console.log(this.state.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } else {
       console.log("You dont choose anything.");
       client_key
@@ -67,7 +93,7 @@ class App extends Component {
     } else {
       content = this.state.data.map((item, index) => {
         return (
-          <div className="col-3">
+          <div className="col-3" key={index}>
             <div className="image-card-container">
               <img src={item.images.original.url} alt={item.title} />
               <h4>{!item.title ? "No Title" : item.title}</h4>
@@ -113,9 +139,11 @@ class App extends Component {
             </div>
           </div>
         </div>
+
         <div className="content container">
           <div className="row">{content}</div>
         </div>
+
         <div className="footer container">
           <div className="row">
             <div className="content-footer col-12">
