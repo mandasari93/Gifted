@@ -4,6 +4,8 @@ import Select from "react-select";
 import { FaHeart } from "react-icons/fa";
 import "./App.css";
 
+var emptyImage = require("./assets/sad.png");
+
 var GphApiClient = require("giphy-js-sdk-core");
 const client_key = GphApiClient("mmBoU4I5w6UfsLVutRV3bcVFIFWRl4uH");
 
@@ -18,6 +20,15 @@ class App extends Component {
     this.handleInput = this.handleInput.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillMount() {
+    client_key
+      .random("gifs", { tag: "happy" })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {});
   }
 
   handleInput(event) {
@@ -41,7 +52,7 @@ class App extends Component {
     if (this.state.select.value === "random") {
       console.log("You choose a random data.");
       client_key
-        .trending("gifs", { q: this.state.input })
+        .search("gifs", { q: this.state.input })
         .then(response => {
           this.setState({
             data: response.data
@@ -87,7 +98,18 @@ class App extends Component {
     if (this.state.data.length === 0) {
       content = (
         <div className="empty-content col-12">
-          <h2>No Data</h2>
+          <div className="row ">
+            <div className="col-12 empty-image">
+              <img
+                style={{ width: 200, height: 200 }}
+                src={emptyImage}
+                alt="empty image"
+              />
+            </div>
+            <div className="col-12 empty-image">
+              <h4>Search for your GIPHY!!</h4>
+            </div>
+          </div>
         </div>
       );
     } else {

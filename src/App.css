@@ -84,6 +84,14 @@ button:focus {
 .empty-content {
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: 500px;
+}
+
+.empty-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .content {
