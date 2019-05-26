@@ -103,7 +103,7 @@ class App extends Component {
               <img
                 style={{ width: 200, height: 200 }}
                 src={emptyImage}
-                alt="empty image"
+                alt="empty"
               />
             </div>
             <div className="col-12 empty-image">
